@@ -7,13 +7,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import Dict, Any, List
 
-from fastapi import FastAPI, HTTPException
-from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
-from typing import Dict, Any, List
-
 from app.core.llm import LLMProvider, LLMSettings
+from app.core.logger import logger
 from app.agents.financial_advisor import FinancialAdvisorAgent
+from app.agents.ledger_agent import LedgerAgent
 
 app = FastAPI(title="100 AI Agents API")
 
@@ -28,7 +25,8 @@ app.add_middleware(
 
 # Registry of available agents
 AGENTS = {
-    "financial-advisor": FinancialAdvisorAgent()
+    "financial-advisor": FinancialAdvisorAgent(),
+    "ledger-agent": LedgerAgent()
 }
 
 # Supported Models Configuration
@@ -83,9 +81,13 @@ async def run_agent(agent_id: str, request: AgentRunRequest):
     agent = AGENTS[agent_id]
     
     try:
-        llm = LLMProvider.get_llm(request.llm_settings)
-        result = await agent.run(request.inputs, llm)
-        return {"output": result}
+        # Run the agent
+        logger.info(f"Received request to run agent: {agent_id}")
+        result = await agent.execute(request.inputs, request.llm_settings)
+        return {
+            "output": result,
+            "content_type": "text/markdown"
+        }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 

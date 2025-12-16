@@ -1,6 +1,7 @@
 from typing import Dict, Any
 from langchain_core.prompts import PromptTemplate
 from langchain_core.language_models.chat_models import BaseChatModel
+from app.core.llm import LLMSettings
 
 from app.agents.base import BaseAgent, AgentMetadata
 
@@ -23,7 +24,8 @@ class FinancialAdvisorAgent(BaseAgent):
             }
         )
 
-    async def run(self, inputs: Dict[str, Any], llm: BaseChatModel) -> str:
+    async def run(self, inputs: Dict[str, Any], llm_settings: LLMSettings) -> str:
+        llm = self.get_llm(llm_settings)
         template = """
 You are a financial advisor AI. Given the user's financial profile below, provide 3 personalized suggestions:
 - Summarize their financial status

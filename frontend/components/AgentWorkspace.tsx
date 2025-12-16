@@ -5,6 +5,8 @@ import { useAppStore } from "@/lib/store";
 import { runAgent } from "@/lib/api";
 import { Loader2, Play, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 export function AgentWorkspace() {
   const { selectedAgent, llmSettings } = useAppStore();
@@ -30,6 +32,7 @@ export function AgentWorkspace() {
     setOutput("");
     try {
       const res = await runAgent(selectedAgent.id, inputs, llmSettings);
+      console.log("RunAgent Response:", res);
       setOutput(res.output);
     } catch (err: any) {
       setOutput(`Error: ${err.message}`);
@@ -192,9 +195,9 @@ export function AgentWorkspace() {
                 transition={{ duration: 0.4 }}
                 className="prose prose-slate max-w-none bg-slate-50/80 p-8 rounded-2xl border border-slate-100 shadow-sm ring-1 ring-slate-200/50"
               >
-                <pre className="whitespace-pre-wrap font-sans text-slate-700 text-base leading-relaxed">
+                <ReactMarkdown remarkPlugins={[remarkGfm]}>
                   {output}
-                </pre>
+                </ReactMarkdown>
               </motion.div>
             ) : (
               <div className="h-[60vh] flex flex-col items-center justify-center text-slate-300 border-2 border-dashed border-slate-100 rounded-2xl bg-slate-50/30">
