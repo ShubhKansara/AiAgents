@@ -11,6 +11,7 @@ from app.core.llm import LLMProvider, LLMSettings
 from app.core.logger import logger
 from app.agents.financial_advisor import FinancialAdvisorAgent
 from app.agents.ledger_agent import LedgerAgent
+from app.agents.code_review_agent import CodeReviewAgent
 
 app = FastAPI(title="100 AI Agents API")
 
@@ -26,14 +27,15 @@ app.add_middleware(
 # Registry of available agents
 AGENTS = {
     "financial-advisor": FinancialAdvisorAgent(),
-    "ledger-agent": LedgerAgent()
+    "ledger-agent": LedgerAgent(),
+    "code-review-agent": CodeReviewAgent()
 }
 
 # Supported Models Configuration
 # Updated to use correct model names for Gemini and others
 SUPPORTED_MODELS = {
     "openai": ["gpt-4o", "gpt-4-turbo", "gpt-3.5-turbo"],
-    "gemini": [ "gemini-2.5-flash", "gemini-2.5-pro", "gemini-flash-latest"],
+    "gemini": [ "gemini-2.5-flash", "gemini-2.5-pro", "gemini-flash-latest", "gemini-2.5-flash-lite", "gemma-3-12b"],
     "perplexity": ["llama-3-sonar-large-32k-online", "llama-3-sonar-small-32k-online", "mixtral-8x7b-instruct"],
 }
 
