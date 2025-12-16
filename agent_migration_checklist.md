@@ -15,11 +15,11 @@ Use this list to prioritize implementation. Move high-priority agents to the top
 - [x] 1. Individualized Financial Advisory Agent [Link](./agents/1.md)
 - [x] 2. Ledger Agent [Link](./agents/2.md)
 - [x] 57. AI Code Review Agent [Link](./agents/57.md)
+- [x] 47. AI-powered SEO Optimization Agent [Link](./agents/47.md)
+- [x] 97. Business Strategy Advisor [Link](./agents/97.md)
 
 ### Phase 2: Pending Agents
 
-- [ ] 47. AI-powered SEO Optimization Agent [Link](./agents/47.md)
-- [ ] 97. Business Strategy Advisor [Link](./agents/97.md)
 - [ ] 98. Personalized Product Recommendation Agent [Link](./agents/98.md)
 - [ ] 93. Automated Reporting Agent [Link](./agents/93.md)
 

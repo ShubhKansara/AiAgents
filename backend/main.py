@@ -12,6 +12,8 @@ from app.core.logger import logger
 from app.agents.financial_advisor import FinancialAdvisorAgent
 from app.agents.ledger_agent import LedgerAgent
 from app.agents.code_review_agent import CodeReviewAgent
+from app.agents.seo_optimization_agent import SeoOptimizationAgent
+from app.agents.business_strategy_advisor import BusinessStrategyAdvisor
 
 app = FastAPI(title="100 AI Agents API")
 
@@ -28,7 +30,9 @@ app.add_middleware(
 AGENTS = {
     "financial-advisor": FinancialAdvisorAgent(),
     "ledger-agent": LedgerAgent(),
-    "code-review-agent": CodeReviewAgent()
+    "code-review-agent": CodeReviewAgent(),
+    "seo-agent": SeoOptimizationAgent(),
+    "business-strategy-advisor": BusinessStrategyAdvisor()
 }
 
 # Supported Models Configuration
@@ -36,7 +40,7 @@ AGENTS = {
 SUPPORTED_MODELS = {
     "openai": ["gpt-4o", "gpt-4-turbo", "gpt-3.5-turbo"],
     "gemini": [ "gemini-2.5-flash", "gemini-2.5-pro", "gemini-flash-latest", "gemini-2.5-flash-lite", "gemma-3-12b"],
-    "perplexity": ["llama-3-sonar-large-32k-online", "llama-3-sonar-small-32k-online", "mixtral-8x7b-instruct"],
+    "perplexity": ["sonar-deep-research", "sonar-reasoning-pro", "sonar-pro", "sonar"],
 }
 
 class AgentRunRequest(BaseModel):
