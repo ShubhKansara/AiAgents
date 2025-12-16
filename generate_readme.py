@@ -36,7 +36,7 @@ def generate_readme():
     
     # Iterate from 1 to 100 to maintain order
     for i in range(1, 101):
-        filename = f"{i}.md"
+        filename = f"agents/{i}.md"
         file_path = os.path.join(base_dir, filename)
         
         if os.path.exists(file_path):
@@ -59,7 +59,7 @@ Welcome to the **100 AI Agents Challenge** repository! This project contains 100
         # Title usually comes as "Agent #X: Name", we can split it or just put it in the Name column
         # Let's clean it up slightly for the table
         # If title is "Agent #1: Individualized Financial Advisory Agent"
-        # We want: | 1 | Individualized Financial Advisory Agent | [View](./1.md) |
+        # We want: | 1 | Individualized Financial Advisory Agent | [View](./agents/1.md) |
         
         display_name = title
         if ":" in title:
@@ -70,7 +70,7 @@ Welcome to the **100 AI Agents Challenge** repository! This project contains 100
         # Helper to extract number from filename for the first column
         num = filename.replace('.md', '')
         
-        readme_content += f"| {num} | {display_name} | [Documentation](./{filename}) |\n"
+        readme_content += f"| {num} | {display_name} | [Documentation](./agents/{filename}) |\n"
 
     readme_content += """
 ---
