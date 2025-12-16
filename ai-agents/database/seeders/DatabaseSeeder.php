@@ -15,13 +15,21 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        User::firstOrCreate(
-            ['email' => 'test@example.com'],
+        $this->call([
+            RolesAndPermissionsSeeder::class,
+            AgentsSeeder::class,
+        ]);
+
+        $user = User::firstOrCreate(
+            ['email' => 'admin@admin.com'],
             [
-                'name' => 'Test User',
-                'password' => 'password',
+                'name' => 'Admin User',
+                'password' => 'Test@123',
                 'email_verified_at' => now(),
             ]
         );
+
+        // Assign Admin role to test user for development
+        $user->assignRole('Admin');
     }
 }

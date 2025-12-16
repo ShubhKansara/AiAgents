@@ -1,0 +1,18 @@
+{
+    "inputs": {
+        "expenses": {
+            "housing": 10000,
+            "invest": 15000,
+            "personal": 5000,
+            "EMIs": 10000
+        },
+        "income": 40000,
+        "financial_goals": "house, car"
+    },
+    "llm_settings": {
+        "provider": "gemini",
+        "model_name": "gemini-pro",
+        "temperature": 0.7,
+        "api_key": "AIzaSyDZzFWkKhsEhmYgn4lUKWytiSvtQxKcX58"
+    }
+}
