@@ -30,7 +30,7 @@ class BusinessStrategyAdvisor(BaseAgent):
             }
         )
 
-    async def run(self, inputs: Dict[str, Any], llm_settings: LLMSettings) -> str:
+    async def run(self, inputs: Dict[str, Any], llm_settings: LLMSettings, callbacks: list = None) -> str:
         goals = inputs.get("goals", "")
         threats = inputs.get("threats", "")
         market_trends = inputs.get("market_trends", "")
@@ -66,7 +66,7 @@ Provide a strategic plan in the following Markdown format:
         prompt = PromptTemplate.from_template(template)
         formatted_prompt = prompt.format(goals=goals, threats=threats, market_trends=market_trends)
         
-        llm = self.get_llm(llm_settings)
+        llm = self.get_llm(llm_settings, callbacks=callbacks)
         response = await llm.ainvoke(formatted_prompt)
         
         return response.content

@@ -24,21 +24,21 @@ class FinancialAdvisorAgent(BaseAgent):
             }
         )
 
-    async def run(self, inputs: Dict[str, Any], llm_settings: LLMSettings) -> str:
-        llm = self.get_llm(llm_settings)
+    async def run(self, inputs: Dict[str, Any], llm_settings: LLMSettings, callbacks: list = None) -> str:
+        llm = self.get_llm(llm_settings, callbacks=callbacks)
         template = """
 You are a financial advisor AI. Given the user's financial profile below, provide 3 personalized suggestions:
-- Summarize their financial status
-- Suggest a monthly savings goal
-- Recommend an investment strategy based on their risk profile
+- Summarize their financial status (Assume all amounts are in INR ₹)
+- Suggest a monthly savings goal in INR
+- Recommend an investment strategy based on their risk profile suitable for the Indian market
 
 User Profile:
-Income: ${income}
-Expenses: ${expenses}
-Goals: ${goals}
-Risk: ${risk}
+Income: ₹{income}
+Expenses: {expenses} (in INR)
+Goals: {goals}
+Risk: {risk}
 
-Respond clearly and concisely.
+Respond clearly and concisely using the ₹ symbol for currency.
 """
         prompt = PromptTemplate.from_template(template)
         

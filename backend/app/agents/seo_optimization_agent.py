@@ -26,7 +26,7 @@ class SeoOptimizationAgent(BaseAgent):
             }
         )
 
-    async def run(self, inputs: Dict[str, Any], llm_settings: LLMSettings) -> str:
+    async def run(self, inputs: Dict[str, Any], llm_settings: LLMSettings, callbacks: list = None) -> str:
         content = inputs.get("content", "")
         keyword = inputs.get("target_keyword", "")
         
@@ -56,7 +56,7 @@ Provide your analysis in the following Markdown format:
         prompt = PromptTemplate.from_template(template)
         formatted_prompt = prompt.format(content=content, keyword=keyword)
         
-        llm = self.get_llm(llm_settings)
+        llm = self.get_llm(llm_settings, callbacks=callbacks)
         response = await llm.ainvoke(formatted_prompt)
         
         return response.content

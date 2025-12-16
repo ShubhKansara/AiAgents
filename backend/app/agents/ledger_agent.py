@@ -42,7 +42,7 @@ class LedgerAgent(BaseAgent):
         }
         return pd.DataFrame(data)
 
-    async def run(self, inputs: Dict[str, Any], llm_settings: LLMSettings) -> str:
+    async def run(self, inputs: Dict[str, Any], llm_settings: LLMSettings, callbacks: list = None) -> str:
         # Load data
         if inputs.get("ledger_data"):
             df = pd.DataFrame(inputs["ledger_data"])
@@ -64,7 +64,7 @@ Tasks:
         prompt = PromptTemplate.from_template(template)
         formatted_prompt = prompt.format(ledger_table=ledger_table)
         
-        llm = self.get_llm(llm_settings)
+        llm = self.get_llm(llm_settings, callbacks=callbacks)
         response = await llm.ainvoke(formatted_prompt)
         
         return f"### Ledger Data Analysis\n\n{response.content}\n\n### Analyzed Ledger Data\n\n```\n{ledger_table}\n```"

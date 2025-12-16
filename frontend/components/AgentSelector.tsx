@@ -3,8 +3,20 @@
 import { useEffect, useState } from "react";
 import { fetchAgents, Agent } from "@/lib/api";
 import { useAppStore } from "@/lib/store";
-import { motion } from "framer-motion";
-import { Search } from "lucide-react";
+import { Search, Bot, FileText, User } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarGroup,
+  SidebarGroupLabel,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarRail,
+} from "@/components/ui/sidebar";
 
 export function AgentSelector() {
   const [agents, setAgents] = useState<Agent[]>([]);
@@ -22,55 +34,111 @@ export function AgentSelector() {
   );
 
   return (
-    <div className="flex flex-col h-full bg-slate-50 border-r border-slate-200 w-[320px]">
-      <div className="p-5 border-b border-slate-200 bg-white/50 backdrop-blur-sm">
-        <h2 className="text-xl font-bold text-slate-900 mb-4 tracking-tight">
-          100 AI Agents
-        </h2>
-        <div className="relative group">
-          <Search className="absolute left-3 top-2.5 h-4 w-4 text-slate-400 group-focus-within:text-blue-500 transition-colors" />
-          <input
-            type="text"
-            placeholder="Search agents..."
-            className="w-full pl-9 pr-4 py-2 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all shadow-sm placeholder:text-slate-400"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-        </div>
-      </div>
-
-      <div className="flex-1 overflow-y-auto p-3 space-y-1">
-        {filteredAgents.map((agent) => (
-          <motion.div
-            key={agent.id}
-            whileHover={{ scale: 1.01, x: 2 }}
-            whileTap={{ scale: 0.99 }}
-            onClick={() => setSelectedAgent(agent)}
-            className={`p-3 rounded-xl cursor-pointer transition-all border ${
-              selectedAgent?.id === agent.id
-                ? "bg-blue-600 text-white shadow-lg shadow-blue-200 border-blue-500"
-                : "bg-white hover:bg-white hover:shadow-md text-slate-600 border-transparent hover:border-slate-100 hover:text-slate-900"
-            }`}
-          >
-            <div className="font-semibold text-sm">{agent.name}</div>
-            <div
-              className={`text-xs mt-1 font-medium ${
-                selectedAgent?.id === agent.id
-                  ? "text-blue-100"
-                  : "text-slate-400"
-              }`}
+    <Sidebar
+      className="border-r border-sidebar-border bg-sidebar"
+      collapsible="icon"
+    >
+      <SidebarHeader className="bg-sidebar">
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              size="lg"
+              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
-              {agent.category}
-            </div>
-          </motion.div>
-        ))}
-
-        {filteredAgents.length === 0 && (
-          <div className="p-8 text-center text-slate-400 text-sm">
-            No agents found matching "{searchTerm}"
+              <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-blue-600 text-sidebar-primary-foreground">
+                <Bot className="size-4" />
+              </div>
+              <div className="grid flex-1 text-left text-sm leading-tight">
+                <span className="truncate font-semibold">100 AI Agents</span>
+                <span className="truncate text-xs text-muted-foreground">
+                  Enterprise Edition
+                </span>
+              </div>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+        <div className="px-2 pt-2 group-data-[collapsible=icon]:hidden">
+          <div className="relative">
+            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground/50 pointer-events-none" />
+            <Input
+              placeholder="Find an agent..."
+              className="pl-9 h-9 bg-background/50 border-sidebar-border focus:bg-background transition-colors"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
           </div>
+        </div>
+      </SidebarHeader>
+
+      <SidebarContent>
+        {filteredAgents.length === 0 ? (
+          <div className="p-4 text-center text-sm text-muted-foreground group-data-[collapsible=icon]:hidden">
+            No agents found.
+          </div>
+        ) : (
+          <SidebarGroup>
+            <SidebarGroupLabel className="uppercase tracking-wider text-[10px] font-bold text-sidebar-foreground/50 mt-2">
+              Available Agents
+            </SidebarGroupLabel>
+            <SidebarMenu>
+              {filteredAgents.map((agent) => (
+                <SidebarMenuItem key={agent.id}>
+                  <SidebarMenuButton
+                    isActive={selectedAgent?.id === agent.id}
+                    onClick={() => setSelectedAgent(agent)}
+                    tooltip={agent.name}
+                    className="h-auto py-2.5"
+                  >
+                    {selectedAgent?.id === agent.id ? (
+                      <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded bg-blue-100 text-blue-600 dark:bg-blue-900 dark:text-blue-200">
+                        <Bot className="size-3.5" />
+                      </div>
+                    ) : (
+                      <FileText className="size-4 text-muted-foreground/70" />
+                    )}
+                    <div className="flex flex-col gap-0.5 text-left w-full overflow-hidden leading-none">
+                      <span
+                        className={
+                          selectedAgent?.id === agent.id
+                            ? "font-medium text-foreground"
+                            : "text-muted-foreground group-hover:text-foreground transition-colors"
+                        }
+                      >
+                        {agent.name}
+                      </span>
+                      <span className="truncate text-[10px] text-muted-foreground/60">
+                        {agent.category}
+                      </span>
+                    </div>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroup>
         )}
-      </div>
-    </div>
+      </SidebarContent>
+
+      <SidebarFooter>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              size="lg"
+              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+            >
+              <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-teal-500 text-white">
+                <User className="size-4" />
+              </div>
+              <div className="grid flex-1 text-left text-sm leading-tight">
+                <span className="truncate font-semibold">User Profile</span>
+                <span className="truncate text-xs text-muted-foreground">
+                  user@example.com
+                </span>
+              </div>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarFooter>
+      <SidebarRail />
+    </Sidebar>
   );
 }

@@ -90,6 +90,13 @@ async def run_agent(agent_id: str, request: AgentRunRequest):
         # Run the agent
         logger.info(f"Received request to run agent: {agent_id}")
         result = await agent.execute(request.inputs, request.llm_settings)
+        
+        # If result is a dict (from BaseAgent.execute), return it directly with content_type added
+        if isinstance(result, dict):
+             result["content_type"] = "text/markdown"
+             return result
+        
+        # Fallback for legacy agents returning string directly (if any)
         return {
             "output": result,
             "content_type": "text/markdown"

@@ -16,18 +16,20 @@ class LLMSettings(BaseModel):
 
 class LLMProvider:
     @staticmethod
-    def get_llm(settings: LLMSettings) -> BaseChatModel:
+    def get_llm(settings: LLMSettings, callbacks: list = None) -> BaseChatModel:
         if settings.provider == "openai":
             return ChatOpenAI(
                 model=settings.model_name,
                 temperature=settings.temperature,
                 api_key=settings.api_key or os.getenv("OPENAI_API_KEY"),
+                callbacks=callbacks,
             )
         elif settings.provider == "gemini":
             return ChatGoogleGenerativeAI(
                 model=settings.model_name,
                 temperature=settings.temperature,
                 google_api_key=settings.api_key or os.getenv("GOOGLE_API_KEY"),
+                callbacks=callbacks,
             )
         elif settings.provider == "perplexity":
             # Perplexity is compatible with OpenAI API
@@ -36,6 +38,7 @@ class LLMProvider:
                 temperature=settings.temperature,
                 api_key=settings.api_key or os.getenv("PERPLEXITY_API_KEY"),
                 base_url="https://api.perplexity.ai",
+                callbacks=callbacks,
             )
         else:
             raise ValueError(f"Unsupported provider: {settings.provider}")

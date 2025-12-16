@@ -26,7 +26,7 @@ class CodeReviewAgent(BaseAgent):
             }
         )
 
-    async def run(self, inputs: Dict[str, Any], llm_settings: LLMSettings) -> str:
+    async def run(self, inputs: Dict[str, Any], llm_settings: LLMSettings, callbacks: list = None) -> str:
         code = inputs.get("code_snippet", "")
         language = inputs.get("language", "any language")
         
@@ -61,7 +61,7 @@ Provide output in the following Markdown format:
         prompt = PromptTemplate.from_template(template)
         formatted_prompt = prompt.format(code=code, language=language)
         
-        llm = self.get_llm(llm_settings)
+        llm = self.get_llm(llm_settings, callbacks=callbacks)
         response = await llm.ainvoke(formatted_prompt)
         
         return response.content
